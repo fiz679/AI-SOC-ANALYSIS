@@ -50,47 +50,19 @@ if uploaded_file is not None:
         if col in data.columns:
             data[col] = data[col].astype("category").cat.codes
 
-       # Prediction
-    try:
-        predictions = model.predict(data)
-        labels = target_encoder.inverse_transform(predictions)
-        df["Predicted Threat"] = labels
+    # Remove label column if present
+    if "threat_label" in data.columns:
+        data = data.drop(columns=["threat_label"])
 
-        st.write("## AI Prediction")
-        st.dataframe(df.head(20))
-
-        # Dashboard
-        benign = (df["Predicted Threat"] == "benign").sum()
-        suspicious = (df["Predicted Threat"] == "suspicious").sum()
-        malicious = (df["Predicted Threat"] == "malicious").sum()
-
-        c1, c2, c3 = st.columns(3)
-
-        c1.metric("Benign", benign)
-        c2.metric("Suspicious", suspicious)
-        c3.metric("Malicious", malicious)
-
-        # Chart
-        chart = px.bar(
-            x=["Benign", "Suspicious", "Malicious"],
-            y=[benign, suspicious, malicious],
-            title="Threat Distribution"
-        )
-
-        st.plotly_chart(chart, use_container_width=True)
-
-    except Exception as e:
-        st.error(f"Prediction failed: {e}")
-
-   # Prediction
-try:
+    # Prediction
     predictions = model.predict(data)
+
     labels = target_encoder.inverse_transform(predictions)
+
     df["Predicted Threat"] = labels
 
-except Exception as e:
-    st.error(f"Prediction failed: {e}")
-    st.stop()
+    st.write("## AI Prediction")
+    st.dataframe(df.head(20))
 
     # Dashboard
 
