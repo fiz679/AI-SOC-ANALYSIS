@@ -21,7 +21,9 @@ if uploaded_file is not None:
 
     df = pd.read_csv(uploaded_file)
 
-    st.success("Dataset uploaded successfully!")
+    st.write("File uploaded successfully!")
+st.write(df.shape)
+ st.success("Dataset uploaded successfully!")
 
     st.write("### Uploaded Dataset")
     st.dataframe(df.head())
@@ -54,6 +56,7 @@ if uploaded_file is not None:
 
     # Prediction
     predictions = model.predict(data)
+   st.write("Prediction is about to start...")
     labels = target_encoder.inverse_transform(predictions)
     df["Predicted Threat"] = labels
 
