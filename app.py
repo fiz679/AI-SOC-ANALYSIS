@@ -3,9 +3,7 @@ import pandas as pd
 import joblib
 import plotly.express as px
 
-# -----------------------------
 # Load Model
-# -----------------------------
 model = joblib.load("soc_model.pkl")
 target_encoder = joblib.load("target_encoder.pkl")
 
@@ -53,29 +51,16 @@ if uploaded_file is not None:
     # Remove label column if present
     if "threat_label" in data.columns:
         data = data.drop(columns=["threat_label"])
-        # Debug information
-st.write("Columns in uploaded file:")
-st.write(data.columns.tolist())
 
-st.write("Shape of uploaded data:")
-st.write(data.shape)
     # Prediction
-
-    try:
     predictions = model.predict(data)
     labels = target_encoder.inverse_transform(predictions)
-    df["Predicted Threat"] = labels
-except Exception as e:
-    st.exception(e)
-    st.stop()
-
     df["Predicted Threat"] = labels
 
     st.write("## AI Prediction")
     st.dataframe(df.head(20))
 
     # Dashboard
-
     benign = (df["Predicted Threat"] == "benign").sum()
     suspicious = (df["Predicted Threat"] == "suspicious").sum()
     malicious = (df["Predicted Threat"] == "malicious").sum()
@@ -85,8 +70,6 @@ except Exception as e:
     c1.metric("Benign", benign)
     c2.metric("Suspicious", suspicious)
     c3.metric("Malicious", malicious)
-
-    # Chart
 
     chart = px.bar(
         x=["Benign", "Suspicious", "Malicious"],
