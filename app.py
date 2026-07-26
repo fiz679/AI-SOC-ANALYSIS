@@ -53,9 +53,14 @@ if uploaded_file is not None:
     # Remove label column if present
     if "threat_label" in data.columns:
         data = data.drop(columns=["threat_label"])
+        # Debug information
+st.write("Columns in uploaded file:")
+st.write(data.columns.tolist())
 
+st.write("Shape of uploaded data:")
+st.write(data.shape)
     # Prediction
-    
+
     try:
     predictions = model.predict(data)
     labels = target_encoder.inverse_transform(predictions)
