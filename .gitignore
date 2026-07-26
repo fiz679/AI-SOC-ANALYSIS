@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+
+.streamlit/secrets.toml
+
+soc_model.pkl
+target_encoder.pkl
+
+.DS_Store
