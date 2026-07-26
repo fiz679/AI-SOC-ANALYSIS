@@ -55,9 +55,14 @@ if uploaded_file is not None:
         data = data.drop(columns=["threat_label"])
 
     # Prediction
+    
+    try:
     predictions = model.predict(data)
-
     labels = target_encoder.inverse_transform(predictions)
+    df["Predicted Threat"] = labels
+except Exception as e:
+    st.exception(e)
+    st.stop()
 
     df["Predicted Threat"] = labels
 
